@@ -18,6 +18,13 @@ class _ForgotPasswordState extends State<ForgotPassword> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xff25367B),
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xff25367B),
+          title: const Text(
+            "Forgot password",
+            style: TextStyle(color: Colors.white),
+          )),
       body: Form(
           key: formKey,
           child: Container(

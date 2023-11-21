@@ -22,6 +22,13 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+          automaticallyImplyLeading: false,
+          backgroundColor: const Color(0xff25367B),
+          title: const Text(
+            "Login",
+            style: TextStyle(color: Colors.white),
+          )),
       backgroundColor: const Color(0xff25367B),
       body: Form(
           key: formKey,
