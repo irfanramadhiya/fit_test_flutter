@@ -194,11 +194,7 @@ class _HomeState extends State<Home> {
                   ),
                 );
               } else {
-                return const Center(
-                    child: Text(
-                  'No data yet',
-                  style: TextStyle(color: Colors.white),
-                ));
+                return const Center(child: CircularProgressIndicator());
               }
             },
           )),
@@ -216,9 +212,6 @@ class _HomeState extends State<Home> {
   }
 
   Stream<List<UserApp>> getUsers(String token) {
-    // return FirebaseFirestore.instance.collection("users").snapshots().map(
-    //     (snapshot) =>
-    //         snapshot.docs.map((doc) => UserApp.fromJson(doc.data())).toList());
     if (isTokenValid) {
       return FirebaseFirestore.instance.collection("users").snapshots().map(
           (snapshot) => snapshot.docs
@@ -226,13 +219,5 @@ class _HomeState extends State<Home> {
               .toList());
     }
     return const Stream.empty();
-    // if(token ==  FirebaseAuth.instance.currentUser?.getIdToken()){
-    //   return FirebaseFirestore.instance
-    //   .collection("users")
-    //   .snapshots()
-    //   .map((snapshot) =>
-    //       snapshot.docs.map((doc) => UserApp.fromJson(doc.data())).toList());
-    // }
-    // return [];
   }
 }

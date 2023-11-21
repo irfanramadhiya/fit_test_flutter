@@ -1,3 +1,4 @@
+import 'package:email_validator/email_validator.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fit_test/login.dart';
 import 'package:fit_test/service.dart';
@@ -50,6 +51,8 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                   validator: (value) {
                     if (value!.isEmpty) {
                       return "E-mail can't be empty";
+                    } else if (!EmailValidator.validate(value)) {
+                      return "E-mail is invalid";
                     } else {
                       return null;
                     }
@@ -80,16 +83,21 @@ class _ForgotPasswordState extends State<ForgotPassword> {
                         final isValid = formKey.currentState!.validate();
 
                         if (isValid) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ));
                           try {
                             await Service().resetPassword(_email.text);
+                            Navigator.of(context).pop();
                             ScaffoldMessenger.of(context)
                                 .showSnackBar(const SnackBar(
                               content: Text("E-mail sent"),
                             ));
-                            const SnackBar(
-                              content: Text("E-mail sent"),
-                            );
                           } on FirebaseAuthException catch (e) {
+                            Navigator.of(context).pop();
                             print(e.message);
                             setState(() {
                               errorMsg = e.message!;

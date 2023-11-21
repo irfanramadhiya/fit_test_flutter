@@ -138,10 +138,17 @@ class _LoginState extends State<Login> {
                         final isValid = formKey.currentState!.validate();
 
                         if (isValid) {
+                          showDialog(
+                              context: context,
+                              barrierDismissible: false,
+                              builder: (context) => const Center(
+                                    child: CircularProgressIndicator(),
+                                  ));
                           try {
                             await Service().signIn(_email.text, _password.text);
                             try {
                               String? token = await Service().getToken();
+                              Navigator.of(context).pop();
                               Navigator.push(
                                   context,
                                   MaterialPageRoute(
@@ -149,12 +156,14 @@ class _LoginState extends State<Login> {
                                             token: token,
                                           ))));
                             } on FirebaseAuthException catch (e) {
+                              Navigator.of(context).pop();
                               print(e.message);
                               setState(() {
                                 errorMsg = e.message!;
                               });
                             }
                           } on FirebaseAuthException catch (e) {
+                            Navigator.of(context).pop();
                             print(e.message);
                             setState(() {
                               errorMsg = e.message!;

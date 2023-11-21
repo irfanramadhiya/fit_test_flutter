@@ -58,7 +58,7 @@ class _RegisterState extends State<Register> {
                       validator: (value) {
                         if (value!.isEmpty) {
                           return "Name can't be empty";
-                        } else if (value.length < 3 && value.length > 50) {
+                        } else if (value.length < 3 || value.length > 50) {
                           return "Name must be between 3 to 50 characters";
                         } else {
                           return null;
@@ -183,7 +183,7 @@ class _RegisterState extends State<Register> {
                           )),
                       validator: (value) {
                         if (value!.isEmpty) {
-                          return "Password can't be empty";
+                          return "Confirm password can't be empty";
                         } else if (value != _password.text) {
                           return "Confirm password and password does not match";
                         } else {
@@ -216,14 +216,22 @@ class _RegisterState extends State<Register> {
                             final isValid = formKey.currentState!.validate();
 
                             if (isValid) {
+                              showDialog(
+                                  context: context,
+                                  barrierDismissible: false,
+                                  builder: (context) => const Center(
+                                        child: CircularProgressIndicator(),
+                                      ));
                               try {
                                 await Service().signUp(
                                     _name.text, _email.text, _password.text);
+                                Navigator.of(context).pop();
                                 Navigator.push(
                                     context,
                                     MaterialPageRoute(
                                         builder: ((context) => const Login())));
                               } on FirebaseAuthException catch (e) {
+                                Navigator.of(context).pop();
                                 print(e.message);
                                 setState(() {
                                   errorMsg = e.message!;
